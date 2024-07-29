@@ -2,15 +2,18 @@ import requests
 from bs4 import BeautifulSoup
 
 # Определите URL страницы поиска на Avito
-#search_query = "ноутбук"  # ключевое слово для поиска
-#url = f"https://www.avito.ru/rossiya?q={search_query}"
-url = f"https://www.avito.ru/all/avtomobili"
-
+# search_query = "ноутбук"  # ключевое слово для поиска
+# url = f"https://www.avito.ru/rossiya?q={search_query}"
+url = f"https://www.avito.ru/all/avtomobili/audi-ASgBAgICAUTgtg3elyg?cd=1"
 
 # Функция для парсинга страницы и извлечения данных
 def parse_avito_page(url):
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    }
+
     # Отправляем GET-запрос на страницу
-    response = requests.get(url)
+    response = requests.get(url, headers=headers)
     response.raise_for_status()  # Проверка на успешность запроса
 
     # Создаем объект BeautifulSoup для парсинга HTML
@@ -22,9 +25,11 @@ def parse_avito_page(url):
     # Извлекаем заголовки, ссылки и цены
     results = []
     for item in items:
-        title = item.find('h3', class_='title-root').get_text(strip=True) if item.find('h3', class_='title-root') else 'Без названия'
+        title = item.find('h3', class_='title-root').get_text(strip=True) if item.find('h3',
+                                                                                       class_='title-root') else 'Без названия'
         link = item.find('a', class_='link-link').get('href') if item.find('a', class_='link-link') else None
-        price = item.find('span', class_='price-text').get_text(strip=True) if item.find('span', class_='price-text') else 'Цена не указана'
+        price = item.find('span', class_='price-text').get_text(strip=True) if item.find('span',
+                                                                                         class_='price-text') else 'Цена не указана'
 
         # Сохраняем данные
         results.append({
@@ -35,6 +40,7 @@ def parse_avito_page(url):
 
     return results
 
+
 # Используем функцию и выводим результаты
 results = parse_avito_page(url)
 for result in results:
@@ -42,3 +48,4 @@ for result in results:
     print(f"Ссылка: {result['link']}")
     print(f"Цена: {result['price']}")
     print('-' * 40)
+
