@@ -12,7 +12,7 @@ chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-shm-usage')
 
 # Путь к вашему драйверу Chrome
-webdriver_service = Service('/path/to/chromedriver')  # Укажите путь к chromedriver
+webdriver_service = Service('')  # Укажите путь к chromedriver
 
 # Создание экземпляра веб-драйвера
 driver = webdriver.Chrome(service=webdriver_service, options=chrome_options)
